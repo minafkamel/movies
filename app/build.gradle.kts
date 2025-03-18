@@ -64,7 +64,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.activity.compose)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)
@@ -87,4 +86,10 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test)
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
+    implementation(project(":latest"))
+
+    // Dagger
+    implementation(libs.dagger.hilt)
+    implementation(libs.androidx.ui.test.junit4.android)
+    kapt(libs.dagger.hilt.compiler)
 }

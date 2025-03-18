@@ -58,4 +58,10 @@ dependencies {
     // Dagger
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
+
+    // Compose
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.material3)
+
 }
