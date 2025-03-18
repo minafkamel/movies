@@ -18,13 +18,21 @@ class MoviesViewModel @Inject constructor(
     private val _movies = mutableStateOf<List<Movie>>(emptyList())
     val movies: State<List<Movie>> = _movies
 
+    private val _error = mutableStateOf<String>("")
+    val error: State<String> = _error
+
     init {
         fetchMovies()
     }
 
-    private fun fetchMovies() {
+    fun fetchMovies() {
         viewModelScope.launch {
-            _movies.value = repository.getMovies()
+            try{
+                _movies.value = repository.getMovies()
+            }catch (ex: Exception){
+                _error.value = "Error fetching movies"
+            }
+
         }
     }
 }

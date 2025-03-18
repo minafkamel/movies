@@ -1,17 +1,21 @@
 package com.minafkamel.latest.presentation.movies
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,8 +31,20 @@ fun MovieList(navController: NavHostController, viewModel: MoviesViewModel = hil
         .padding(16.dp)) {
         items(movies.count()) { index ->
             MovieItem(navController, movies[index])
+
+            val state = rememberLazyListState()
+            val isAtBottom = !state.canScrollForward
+            LaunchedEffect(isAtBottom){
+                if (isAtBottom) {
+                    viewModel.fetchMovies()
+                }
+            }
         }
     }
+
+    val error by viewModel.error
+    if(error.isNotEmpty())
+    Toast.makeText(LocalContext.current, error, Toast.LENGTH_LONG).show()
 }
 
 @Composable

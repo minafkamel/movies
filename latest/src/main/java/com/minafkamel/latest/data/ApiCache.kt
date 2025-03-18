@@ -13,4 +13,8 @@ class ApiCache {
     fun <T : Parcelable> get(key: String): T? {
         return cache[key] as? T
     }
+
+    fun <T : Parcelable> getAll(): List<Parcelable> {
+        return cache.values.toList()
+    }
 }
