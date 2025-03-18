@@ -8,5 +8,5 @@ class LocalDataSource @Inject constructor(private val apiCache: ApiCache) {
         movies.forEach { apiCache.save(it.id.toString(), it) }
     }
 
-    fun getMovieBy(id: String) = apiCache.get<Response.Movie>(id)
+    fun getMovieBy(id: Long) = apiCache.get<Response.Movie>(id.toString())
 }

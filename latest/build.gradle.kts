@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.org.jetbrains.kotlin.kapt)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.hilt)
     id("kotlin-parcelize")
 }
 
@@ -58,10 +60,15 @@ dependencies {
     // Dagger
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
 
     // Compose
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
+
+    // Coil
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
 
 }

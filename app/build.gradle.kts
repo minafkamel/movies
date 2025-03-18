@@ -65,9 +65,6 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
 
-    // Coroutines
-    implementation(libs.kotlinx.coroutines.android)
-
     // Dagger
     implementation(libs.dagger.hilt)
     implementation(libs.androidx.ui.test.junit4.android)
@@ -87,9 +84,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     implementation(project(":latest"))
-
-    // Dagger
-    implementation(libs.dagger.hilt)
-    implementation(libs.androidx.ui.test.junit4.android)
-    kapt(libs.dagger.hilt.compiler)
 }

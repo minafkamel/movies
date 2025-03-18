@@ -14,30 +14,32 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.minafkamel.latest.R
 import com.minafkamel.latest.data.Response
 
 @Composable
-fun MovieList(viewModel: MoviesViewModel = viewModel()) {
+fun MovieList(navController: NavHostController, viewModel: MoviesViewModel = hiltViewModel()) {
     val movies by viewModel.movies
     LazyColumn(modifier = Modifier
         .fillMaxSize()
         .padding(16.dp)) {
         items(movies.count()) { index ->
-            MovieItem(movies[index])
+            MovieItem(navController, movies[index])
         }
     }
 }
 
 @Composable
-fun MovieItem(movie: Response.Movie) {
+fun MovieItem(navController: NavHostController, movie: Response.Movie) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         shape = MaterialTheme.shapes.medium,
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        onClick = { navController.navigate("details/${movie.id}") }
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
             Text(text = movie.title, style = MaterialTheme.typography.titleMedium)

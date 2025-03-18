@@ -22,5 +22,5 @@ class Repository @Inject constructor(
         }
     }
 
-    fun getMovieById(id: String) = localDataSource.getMovieBy(id)
+    fun getMovieById(id: Long) = localDataSource.getMovieBy(id)
 }
