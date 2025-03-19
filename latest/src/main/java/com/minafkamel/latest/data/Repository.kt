@@ -1,6 +1,5 @@
 package com.minafkamel.latest.data
 
-import com.minafkamel.latest.data.Response.Movie
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -9,18 +8,22 @@ class Repository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource
 ) {
+    val valuesFlow = localDataSource.moviesFlow
+
     private var page = 0
-    suspend fun getMovies() : List<Movie> {
+
+    suspend fun getMovies() {
         page++
         val response = remoteDataSource.getMovies(page)
         if (response.body() != null) {
             val bodyResponse = response.body() as Response
             localDataSource.saveMovies(bodyResponse.movies)
-            return localDataSource.getAllMovies() as List<Movie>
         } else {
             throw Exception()
         }
     }
+
+    suspend fun filter(search: String) = localDataSource.filter(search)
 
     fun getMovieById(id: Long) = localDataSource.getMovieBy(id)
 }

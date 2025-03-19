@@ -2,4 +2,6 @@
 <resources>
     <string name="release_date">Release Date: %1$s</string>
     <string name="image_path_base">https://image.tmdb.org/t/p/w185</string>
+    <string name="search">Search</string>
+    <string name="search_movies">Search movies...</string>
 </resources>

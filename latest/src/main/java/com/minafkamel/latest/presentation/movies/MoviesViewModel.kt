@@ -5,7 +5,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.minafkamel.latest.data.Repository
-import com.minafkamel.latest.data.Response.Movie
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,10 +14,9 @@ class MoviesViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
-    private val _movies = mutableStateOf<List<Movie>>(emptyList())
-    val movies: State<List<Movie>> = _movies
+    val moviesFlow = repository.valuesFlow
 
-    private val _error = mutableStateOf<String>("")
+    private val _error = mutableStateOf("")
     val error: State<String> = _error
 
     init {
@@ -27,12 +25,14 @@ class MoviesViewModel @Inject constructor(
 
     fun fetchMovies() {
         viewModelScope.launch {
-            try{
-                _movies.value = repository.getMovies()
-            }catch (ex: Exception){
+            try {
+                repository.getMovies()
+                _error.value = ""
+            } catch (ex: Exception) {
                 _error.value = "Error fetching movies"
             }
-
         }
     }
+
+    fun filter(search: String) = viewModelScope.launch { repository.filter(search) }
 }

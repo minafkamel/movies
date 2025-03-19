@@ -1,6 +1,7 @@
 [versions]
 activityCompose = "1.9.1"
 agp = "8.5.2"
+foundation = "1.7.8"
 hiltNavigationComposeVersion = "1.2.0"
 kotlin = "2.0.0"
 coreKtx = "1.9.1"
@@ -38,6 +39,7 @@ androidx-material3 = { module = "androidx.compose.material3:material3", version.
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
+foundation = { module = "androidx.compose.foundation:foundation", version.ref = "foundation" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationComposeVersion" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }

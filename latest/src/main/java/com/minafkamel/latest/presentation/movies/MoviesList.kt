@@ -13,6 +13,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -25,26 +26,31 @@ import com.minafkamel.latest.data.Response
 
 @Composable
 fun MovieList(navController: NavHostController, viewModel: MoviesViewModel = hiltViewModel()) {
-    val movies by viewModel.movies
-    LazyColumn(modifier = Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        items(movies.count()) { index ->
-            MovieItem(navController, movies[index])
+    val movies = viewModel.moviesFlow.collectAsState()
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        movies.value?.let {
+            items(it.count()) { index ->
+                MovieItem(navController, it[index])
 
-            val state = rememberLazyListState()
-            val isAtBottom = !state.canScrollForward
-            LaunchedEffect(isAtBottom){
-                if (isAtBottom) {
-                    viewModel.fetchMovies()
+                val state = rememberLazyListState()
+                val isAtBottom = !state.canScrollForward
+                LaunchedEffect(isAtBottom) {
+                    if (isAtBottom) {
+                        viewModel.fetchMovies()
+                    }
                 }
             }
         }
+
     }
 
     val error by viewModel.error
-    if(error.isNotEmpty())
-    Toast.makeText(LocalContext.current, error, Toast.LENGTH_LONG).show()
+    if (error.isNotEmpty())
+        Toast.makeText(LocalContext.current, error, Toast.LENGTH_LONG).show()
 }
 
 @Composable
