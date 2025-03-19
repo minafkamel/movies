@@ -85,4 +85,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     implementation(project(":latest"))
+    testImplementation(kotlin("test"))
 }

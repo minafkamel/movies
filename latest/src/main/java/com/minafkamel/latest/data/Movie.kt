@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 
 class Response(@SerializedName("results") val movies: List<Movie>) {
     @Parcelize
-    class Movie(
+    data class Movie(
         val id: Long,
         val title: String,
         @SerializedName("release_date") val releaseDate: String,
