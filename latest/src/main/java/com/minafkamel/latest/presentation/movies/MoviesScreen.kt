@@ -11,24 +11,27 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun MoviesScreen(navController: NavHostController, viewModel: MoviesViewModel = hiltViewModel()){
+fun MoviesScreen(navController: NavHostController){
 
-    var query = remember { mutableStateOf("") }
+    val viewModel: MoviesViewModel = hiltViewModel()
+
+    var query = rememberSaveable { mutableStateOf("") }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(start = 16.dp, top = 48.dp, end = 16.dp)
     ) {
         SearchBox(query = query.value, onQueryChanged = {
             query.value = it
             viewModel.filter(it)
         })
         Spacer(modifier = Modifier.height(16.dp))
-        MovieList(navController)
+        MovieList(navController, query)
     }
 }

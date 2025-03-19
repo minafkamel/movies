@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -13,6 +14,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -25,33 +27,56 @@ import com.minafkamel.latest.R
 import com.minafkamel.latest.data.Response
 
 @Composable
-fun MovieList(navController: NavHostController, viewModel: MoviesViewModel = hiltViewModel()) {
+fun MovieList(
+    navController: NavHostController,
+    queryState: MutableState<String>,
+    viewModel: MoviesViewModel = hiltViewModel()
+) {
     val movies = viewModel.moviesFlow.collectAsState()
+    val state = rememberLazyListState()
+    var firstBottomHit = false
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
+        state = state
     ) {
         movies.value?.let {
             items(it.count()) { index ->
                 MovieItem(navController, it[index])
 
-                val state = rememberLazyListState()
-                val isAtBottom = !state.canScrollForward
-                LaunchedEffect(isAtBottom) {
-                    if (isAtBottom) {
+                LaunchedEffect(state.canScrollForward) {
+                    if (scrolledToTheBottom(state, firstBottomHit, queryState)) {
                         viewModel.fetchMovies()
+                        firstBottomHit = true
+                    }
+                    if (state.canScrollForward) {
+                        firstBottomHit = false
                     }
                 }
             }
         }
-
     }
-
     val error by viewModel.error
     if (error.isNotEmpty())
         Toast.makeText(LocalContext.current, error, Toast.LENGTH_LONG).show()
+
+    fun LazyListState.isScrolledToTheEnd() =
+        layoutInfo.visibleItemsInfo.lastOrNull()?.index == layoutInfo.totalItemsCount - 1
+
 }
+
+/**
+ * returns true the ever time lazy column hits the bottom after a scroll in case of no search
+ */
+fun scrolledToTheBottom(
+    state: LazyListState,
+    firstBottomHit: Boolean,
+    queryState: MutableState<String>
+) =
+    state.canScrollForward.not() && state.firstVisibleItemIndex > 1 && !firstBottomHit && queryState.value.isEmpty()
+
 
 @Composable
 fun MovieItem(navController: NavHostController, movie: Response.Movie) {
